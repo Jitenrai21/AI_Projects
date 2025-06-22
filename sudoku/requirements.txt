@@ -1,0 +1,2 @@
+pygame
+pygbag # WebAssembly-based compiler that allows you to run Pygame code directly in a web browser without needing Python installed. It converts your .py script into HTML+WASM.

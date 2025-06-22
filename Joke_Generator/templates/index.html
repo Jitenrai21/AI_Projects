@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Joke Generator</title>
+</head>
+<body>
+  <h1>😂 Joke Generator</h1>
+  <input type="text" id="topic" placeholder="Enter a topic (e.g., cats, tech) or leave blank" style="width: 300px; padding: 5px;">
+  <button onclick="getJoke()">Generate Joke</button>
+  <p id="joke"></p>
+
+  <script>
+    async function getJoke() {
+      try {
+        document.getElementById('joke').innerText = 'Loading...';
+        const topic = document.getElementById('topic').value.trim();
+        const res = await fetch('/generate-joke', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ topic: topic })
+        });
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        const data = await res.json();
+        if (data.error) {
+          document.getElementById('joke').innerText = `Error: ${data.error}`;
+        } else {
+          document.getElementById('joke').innerText = data.joke;
+        }
+      } catch (error) {
+        document.getElementById('joke').innerText = `Error: ${error.message}`;
+      }
+    }
+  </script>
+</body>
+</html>

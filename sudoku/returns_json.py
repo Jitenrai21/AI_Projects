@@ -27,6 +27,14 @@ class SudokuGenerator:
                     return False
         return True
 
+    def find_empty(self):
+        """Find an empty cell (0) on the board."""
+        for i in range(self.grid_size):
+            for j in range(self.grid_size):
+                if self.board[i][j] == 0:
+                    return (i, j)
+        return None
+    
     def solve(self):
         """Solve the Sudoku board using backtracking."""
         empty = self.find_empty()
@@ -43,14 +51,6 @@ class SudokuGenerator:
                 self.board[row][col] = 0
         return False
 
-    def find_empty(self):
-        """Find an empty cell (0) on the board."""
-        for i in range(self.grid_size):
-            for j in range(self.grid_size):
-                if self.board[i][j] == 0:
-                    return (i, j)
-        return None
-
     def generate_puzzle(self):
         """Generate a Sudoku puzzle with specified difficulty."""
         self.board = [[0] * self.grid_size for _ in range(self.grid_size)]
@@ -63,7 +63,7 @@ class SudokuGenerator:
             clues = int(total_cells * random.uniform(0.3, 0.5))
         else:  # hard
             clues = int(total_cells * random.uniform(0.2, 0.3))
-        cells_to_remove = total_cells - clues
+        cells_to_remove = total_cells - clues # reoving values
         cells = [(i, j) for i in range(self.grid_size) for j in range(self.grid_size)]
         random.shuffle(cells)
         for i, j in cells[:cells_to_remove]:

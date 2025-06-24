@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 load_dotenv()
-
 import streamlit as st
 import os
 import google.generativeai as genai
@@ -26,7 +25,7 @@ if 'current_input' not in st.session_state:
 def get_gemini_response(question):
     try:
         if 'gemini_chat_session' not in st.session_state:
-            st.session_state['gemini_chat_session'] = model.start_chat(history=[])
+            st.session_state['gemini_chat_session'] = model.start_chat(history=[]) # model.start_chat() -> (Gemini’s chat session object)
 
         response = st.session_state['gemini_chat_session'].send_message(question, stream=True)
         return response

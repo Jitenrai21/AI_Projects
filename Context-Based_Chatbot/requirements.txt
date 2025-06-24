@@ -2,3 +2,5 @@ python-dotenv
 streamlit
 google-genai
 google-generativeai
+fastapi 
+uvicorn 

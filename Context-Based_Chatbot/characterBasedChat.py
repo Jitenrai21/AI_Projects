@@ -50,9 +50,14 @@ if selected_persona != st.session_state['last_persona']:
 # Function to generate response
 def get_gemini_response(user_message):
     try:
-        persona_instruction = (
-            f"You are {st.session_state['persona']}, a {persona_options[st.session_state['persona']]}. "
-            f"Please respond in their style and voice, as if you are them."
+        # Load prompt template from file
+        with open('prompt_template.txt', 'r') as file:
+            prompt_template = file.read().strip()
+
+        # Format the prompt with persona details
+        persona_instruction = prompt_template.format(
+            persona_name=st.session_state['persona'],
+            persona_description=persona_options[st.session_state['persona']]
         )
         full_prompt = persona_instruction + "\n\nUser: " + user_message
 

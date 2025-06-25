@@ -58,14 +58,26 @@ async def chat(req: Request, data: ChatRequest, authorization: str = Header(None
         chat_sessions[session_id] = model.start_chat(history=[])
 
     # 5. Build prompt
-    persona_instruction = (
-        f"You are {data.persona}, a {persona_options[data.persona]}. "
-        f"Please respond in their style and voice, as if you are them."
-    )
-    prompt = f"{persona_instruction}\n\nUser: {data.message}"
+    with open('prompt_template.txt', 'r') as file:
+            prompt_template = file.read().strip()
+
+    # Format the prompt with persona details
+    persona_instruction = prompt_template.format(
+            persona_name=data.persona,
+            persona_description=persona_options[data.persona]
+        )
+    prompt = persona_instruction + "\n\nUser: " + data.message
+
+    # persona_instruction = (
+    #     f"You are {data.persona}, a {persona_options[data.persona]}. "
+    #     f"Please respond in their style and voice, as if you are them."
+    # )
+    # prompt = f"{persona_instruction}\n\nUser: {data.message}"
 
     try:
         response = chat_sessions[session_id].send_message(prompt)
         return JSONResponse(content={"response": response.text})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {e}")
+
+# uvicorn main:app --reload

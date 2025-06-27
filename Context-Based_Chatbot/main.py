@@ -32,20 +32,13 @@ app = FastAPI()
 
 # JSON request schema
 class ChatRequest(BaseModel):
+    session_id: str  # The session ID now comes in the request body
     persona: str
     message: str
 
-def get_session_id(req: Request, res: Response) -> str:
-    """Generate or retrieve a session ID from the request cookies."""
-    session_id = req.cookies.get("session_id")
-    if not session_id:
-        session_id = str(uuid.uuid4())  # Generate a new session ID if not found
-        res.set_cookie(key="session_id", value=session_id, max_age=86400)  # Set cookie for 1 day
-    return session_id
-
 @app.post("/chat")
-async def chat(req: Request, res: Response, data: ChatRequest, authorization: str = Header(None)):
-    session_id = get_session_id(req, res)  # Get or create a session ID from request cookies
+async def chat(req: Request, data: ChatRequest, authorization: str = Header(None)):
+    session_id = data.session_id  # Get session ID from the request body
     
     # 1. Validate API key
     if not authorization or not authorization.startswith("Bearer "):
